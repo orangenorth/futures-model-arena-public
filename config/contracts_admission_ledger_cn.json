@@ -1,0 +1,1263 @@
+{
+  "schema_version": 2,
+  "kind": "contract_admission_ledger",
+  "note": "准入台账是候选品种的条款证据准备记录，不是交易所核验结果，也不是可下单授权。状态只说明证据准备到哪一步：pending 未开始、blocked 已阻断、ready_for_review 待人工复核；未取得证据的条款一律保持未知，不填默认值。证据来源只接受所属交易所一手站点的精确域名，且须与条款类型相符；通过来源校验仍不等于已核验或可交易。台账不参与撮合、风控、行情与模型决策。",
+  "prepared_for": "config/contracts_universe_cn.json",
+  "catalogue_schema_version": 1,
+  "catalogue_content_hash": "sha256:73011ec890d77deea28962b508c250697e388260452f498811005b0f7c0a0c31",
+  "catalogue_candidate_count": 83,
+  "source_policy_path": "config/admission_source_policy_cn.json",
+  "source_policy_schema_version": 1,
+  "source_policy_fingerprint": "sha256:761c27c5b05c4cf45f9aa829ae9d62cb1d4b26f01d1794fe83147d129eaa6653",
+  "catalogue_fetched_at": "2026-09-19T10:18:49+08:00",
+  "prepared_at": "2026-09-19",
+  "count": 83,
+  "ledger_fingerprint": "sha256:b8e21172094f59e5e48ae30caf8a22743051478fccfe2bda61496397ab36afb0",
+  "records": {
+    "A0": {
+      "symbol": "A0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "AD0": {
+      "symbol": "AD0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "AG0": {
+      "symbol": "AG0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "AL0": {
+      "symbol": "AL0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "AO0": {
+      "symbol": "AO0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "AP0": {
+      "symbol": "AP0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "AU0": {
+      "symbol": "AU0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "B0": {
+      "symbol": "B0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "BB0": {
+      "symbol": "BB0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "BC0": {
+      "symbol": "BC0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "BR0": {
+      "symbol": "BR0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "BU0": {
+      "symbol": "BU0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "BZ0": {
+      "symbol": "BZ0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "C0": {
+      "symbol": "C0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "CF0": {
+      "symbol": "CF0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "CJ0": {
+      "symbol": "CJ0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "CS0": {
+      "symbol": "CS0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "CU0": {
+      "symbol": "CU0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "CY0": {
+      "symbol": "CY0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "EB0": {
+      "symbol": "EB0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "EC0": {
+      "symbol": "EC0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "EG0": {
+      "symbol": "EG0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "FB0": {
+      "symbol": "FB0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "FG0": {
+      "symbol": "FG0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "FU0": {
+      "symbol": "FU0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "HC0": {
+      "symbol": "HC0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "I0": {
+      "symbol": "I0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "IC0": {
+      "symbol": "IC0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "IF0": {
+      "symbol": "IF0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "IH0": {
+      "symbol": "IH0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "IM0": {
+      "symbol": "IM0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "J0": {
+      "symbol": "J0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "JD0": {
+      "symbol": "JD0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "JM0": {
+      "symbol": "JM0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "JR0": {
+      "symbol": "JR0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "L0": {
+      "symbol": "L0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "LC0": {
+      "symbol": "LC0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "LG0": {
+      "symbol": "LG0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "LH0": {
+      "symbol": "LH0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "LR0": {
+      "symbol": "LR0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "LU0": {
+      "symbol": "LU0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "M0": {
+      "symbol": "M0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "MA0": {
+      "symbol": "MA0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "NI0": {
+      "symbol": "NI0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "NR0": {
+      "symbol": "NR0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "OI0": {
+      "symbol": "OI0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "OP0": {
+      "symbol": "OP0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "P0": {
+      "symbol": "P0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PB0": {
+      "symbol": "PB0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PD0": {
+      "symbol": "PD0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PF0": {
+      "symbol": "PF0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PG0": {
+      "symbol": "PG0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PK0": {
+      "symbol": "PK0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PL0": {
+      "symbol": "PL0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PP0": {
+      "symbol": "PP0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PR0": {
+      "symbol": "PR0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PS0": {
+      "symbol": "PS0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PT0": {
+      "symbol": "PT0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "PX0": {
+      "symbol": "PX0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "RB0": {
+      "symbol": "RB0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "RI0": {
+      "symbol": "RI0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "RM0": {
+      "symbol": "RM0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "RR0": {
+      "symbol": "RR0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "RS0": {
+      "symbol": "RS0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "RU0": {
+      "symbol": "RU0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "SA0": {
+      "symbol": "SA0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "SC0": {
+      "symbol": "SC0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "SF0": {
+      "symbol": "SF0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "SH0": {
+      "symbol": "SH0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "SI0": {
+      "symbol": "SI0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "SM0": {
+      "symbol": "SM0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "SN0": {
+      "symbol": "SN0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "SP0": {
+      "symbol": "SP0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "SR0": {
+      "symbol": "SR0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "SS0": {
+      "symbol": "SS0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "TA0": {
+      "symbol": "TA0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "TF0": {
+      "symbol": "TF0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "TS0": {
+      "symbol": "TS0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "UR0": {
+      "symbol": "UR0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "V0": {
+      "symbol": "V0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "WH0": {
+      "symbol": "WH0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "Y0": {
+      "symbol": "Y0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    },
+    "ZN0": {
+      "symbol": "ZN0",
+      "admission_state": "pending",
+      "blocked_reason": "",
+      "prepared_by": "",
+      "prepared_at": "",
+      "notes": "",
+      "evidence": {
+        "proposed_multiplier": null,
+        "proposed_tick": null,
+        "proposed_sessions": null,
+        "proposed_margin_ratio": null,
+        "proposed_fee": null
+      }
+    }
+  }
+}

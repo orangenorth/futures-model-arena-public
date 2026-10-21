@@ -1,0 +1,17 @@
+# 运行时依赖
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.5
+pyyaml>=6.0
+httpx>=0.27
+openai>=1.30
+pywebview>=5.0; sys_platform == "win32"
+# Bundled Windows Python distributions may not include the IANA time-zone database.
+tzdata>=2024.1
+
+# CTP 行情（market: ctp 时才需要，见 docs/ctp.md）。不装也能跑其余三种行情源，
+# 所以不列为硬依赖：按需 `pip install openctp-ctp`。
+# openctp-ctp>=6.7
+
+# 开发 / 测试
+pytest>=8.0

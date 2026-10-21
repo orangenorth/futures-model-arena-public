@@ -1,0 +1,55 @@
+# 离线演示 / 沙箱验证配置：合成行情 + 四个规则交易员，无需网络与 API Key
+competition:
+  name: "四模型期货竞赛（演示）"
+  market: replay
+  initial_cash: 80000
+  decision_interval_sec: 300
+  tick_interval_sec: 20
+  snapshot_interval_sec: 60
+  timezone: "Asia/Shanghai"
+
+symbols: [RB0, I0, AU0, CU0, M0, TA0]
+
+market_data:
+  cn_futures:
+    contracts_file: config/contracts_cn.json
+  replay:
+    seed: 7
+    bar_seconds: 60
+    start_price: { RB0: 3400, I0: 780, AU0: 560, CU0: 72000, M0: 3100, TA0: 5800 }
+
+risk:
+  max_positions: 4
+  max_leverage: 5
+  max_notional_pct: 0.30
+  max_size_pct: 0.30
+  require_stop_loss: true
+  auto_stop_atr_mult: 2.0
+  slippage_ticks: 1
+  min_hold_sec: 0
+  target_margin_risk_min_ratio: 0.80
+  target_margin_risk_max_ratio: 0.90
+  warning_margin_risk_ratio: 0.90
+  max_margin_risk_ratio: 0.95
+  liquidation_risk_ratio: 1.0
+
+llm:
+  timeout_sec: 60
+  max_retries: 1
+  breaker_failures: 3
+  breaker_skip_rounds: 3
+
+traders:
+  - { id: deepseek, name: DeepSeek, color: "#3b82f6", provider: rule, fallback_rule: trend }
+  - { id: qwen, name: 通义千问, color: "#8b5cf6", provider: rule, fallback_rule: meanrev }
+  - { id: kimi, name: Kimi K3, color: "#10b981", provider: rule, fallback_rule: breakout }
+  - { id: glm, name: 智谱GLM, color: "#f59e0b", provider: rule, fallback_rule: conservative }
+
+storage:
+  db_path: data/demo.db
+  log_dir: logs
+
+server:
+  host: 127.0.0.1
+  port: 0
+  prevent_sleep: false

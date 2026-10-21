@@ -1,0 +1,2109 @@
+{
+  "_comment": "国内期货全品种主力连续合约规格（新浪代码）。覆盖上期所/上期能源/大商所/郑商所/中金所/广期所，即一个权限齐备的境内期货账户可交易的全部期货品种。multiplier=合约乘数, tick=最小变动价位, margin_ratio=保证金比例, fee_per_lot=按手固定手续费(元), fee_rate=按名义万分比(二选一，非零者生效), sessions=交易时段(本地时间, 跨日以 24+ 小时表示)。乘数与最小变动取自交易所合约文本；保证金比例与手续费是常见档位的近似值，各期货公司在交易所标准上另有加收，且会随交易所公告调整——请按自己账户的实际费率核对后修改。 active=false 表示该品种常年几乎没有成交：交易所时段表说它开市，行情源却可能一直给不出新的分钟 bar，配进去只会白占 prompt 体积。symbols: all 展开时跳过它们；确实要跑就在 symbols 里显式写上代码。流动性会变，加之前请按自己账户看到的实际成交量核对。",
+  "calendar_valid_until": "2027-01-01",
+  "holidays": [
+    "2026-01-01",
+    "2026-01-02",
+    "2026-02-16",
+    "2026-02-17",
+    "2026-02-18",
+    "2026-02-19",
+    "2026-02-20",
+    "2026-02-23",
+    "2026-04-06",
+    "2026-05-01",
+    "2026-05-04",
+    "2026-05-05",
+    "2026-06-19",
+    "2026-09-25",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07",
+    "2027-01-01"
+  ],
+  "contracts": {
+    "CU0": {
+      "name": "沪铜",
+      "exchange": "SHFE",
+      "multiplier": 5,
+      "tick": 10,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 0,
+      "fee_rate": 5e-05,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "25:00"
+        ]
+      ]
+    },
+    "AL0": {
+      "name": "沪铝",
+      "exchange": "SHFE",
+      "multiplier": 5,
+      "tick": 5,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "25:00"
+        ]
+      ]
+    },
+    "ZN0": {
+      "name": "沪锌",
+      "exchange": "SHFE",
+      "multiplier": 5,
+      "tick": 5,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "25:00"
+        ]
+      ]
+    },
+    "PB0": {
+      "name": "沪铅",
+      "exchange": "SHFE",
+      "multiplier": 5,
+      "tick": 5,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 0,
+      "fee_rate": 4e-05,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "25:00"
+        ]
+      ]
+    },
+    "NI0": {
+      "name": "沪镍",
+      "exchange": "SHFE",
+      "multiplier": 1,
+      "tick": 10,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "25:00"
+        ]
+      ]
+    },
+    "SN0": {
+      "name": "沪锡",
+      "exchange": "SHFE",
+      "multiplier": 1,
+      "tick": 10,
+      "margin_ratio": 0.14,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "25:00"
+        ]
+      ]
+    },
+    "AU0": {
+      "name": "黄金",
+      "exchange": "SHFE",
+      "multiplier": 1000,
+      "tick": 0.02,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 10,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "26:30"
+        ]
+      ]
+    },
+    "AG0": {
+      "name": "白银",
+      "exchange": "SHFE",
+      "multiplier": 15,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 0,
+      "fee_rate": 5e-05,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "26:30"
+        ]
+      ]
+    },
+    "RB0": {
+      "name": "螺纹钢",
+      "exchange": "SHFE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "HC0": {
+      "name": "热卷",
+      "exchange": "SHFE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "WR0": {
+      "name": "线材",
+      "exchange": "SHFE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ],
+      "active": false
+    },
+    "SS0": {
+      "name": "不锈钢",
+      "exchange": "SHFE",
+      "multiplier": 5,
+      "tick": 5,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 2,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "25:00"
+        ]
+      ]
+    },
+    "BU0": {
+      "name": "沥青",
+      "exchange": "SHFE",
+      "multiplier": 10,
+      "tick": 2,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "RU0": {
+      "name": "天然橡胶",
+      "exchange": "SHFE",
+      "multiplier": 10,
+      "tick": 5,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "SP0": {
+      "name": "纸浆",
+      "exchange": "SHFE",
+      "multiplier": 10,
+      "tick": 2,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 0,
+      "fee_rate": 5e-05,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "FU0": {
+      "name": "燃料油",
+      "exchange": "SHFE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 0,
+      "fee_rate": 2e-05,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "AO0": {
+      "name": "氧化铝",
+      "exchange": "SHFE",
+      "multiplier": 20,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "BR0": {
+      "name": "丁二烯橡胶",
+      "exchange": "SHFE",
+      "multiplier": 5,
+      "tick": 5,
+      "margin_ratio": 0.14,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "SC0": {
+      "name": "原油",
+      "exchange": "INE",
+      "multiplier": 1000,
+      "tick": 0.1,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 20,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "26:30"
+        ]
+      ]
+    },
+    "LU0": {
+      "name": "低硫燃料油",
+      "exchange": "INE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 0,
+      "fee_rate": 2e-05,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "NR0": {
+      "name": "20号胶",
+      "exchange": "INE",
+      "multiplier": 10,
+      "tick": 5,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "BC0": {
+      "name": "国际铜",
+      "exchange": "INE",
+      "multiplier": 5,
+      "tick": 10,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 0,
+      "fee_rate": 5e-05,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "25:00"
+        ]
+      ]
+    },
+    "EC0": {
+      "name": "集运欧线",
+      "exchange": "INE",
+      "multiplier": 50,
+      "tick": 0.1,
+      "margin_ratio": 0.2,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0002,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ]
+    },
+    "A0": {
+      "name": "豆一",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 2,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "B0": {
+      "name": "豆二",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 1,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "M0": {
+      "name": "豆粕",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 1.5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "Y0": {
+      "name": "豆油",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 2,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 2.5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "P0": {
+      "name": "棕榈油",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 2,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 2.5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "C0": {
+      "name": "玉米",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.09,
+      "fee_per_lot": 1.2,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "CS0": {
+      "name": "玉米淀粉",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.09,
+      "fee_per_lot": 1.5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "JD0": {
+      "name": "鸡蛋",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 0,
+      "fee_rate": 0.00015,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ]
+    },
+    "RR0": {
+      "name": "粳米",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 1,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ],
+      "active": false
+    },
+    "LH0": {
+      "name": "生猪",
+      "exchange": "DCE",
+      "multiplier": 16,
+      "tick": 5,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0002,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ]
+    },
+    "I0": {
+      "name": "铁矿石",
+      "exchange": "DCE",
+      "multiplier": 100,
+      "tick": 0.5,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "J0": {
+      "name": "焦炭",
+      "exchange": "DCE",
+      "multiplier": 100,
+      "tick": 0.5,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "JM0": {
+      "name": "焦煤",
+      "exchange": "DCE",
+      "multiplier": 60,
+      "tick": 0.5,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "L0": {
+      "name": "聚乙烯",
+      "exchange": "DCE",
+      "multiplier": 5,
+      "tick": 1,
+      "margin_ratio": 0.11,
+      "fee_per_lot": 1,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "V0": {
+      "name": "PVC",
+      "exchange": "DCE",
+      "multiplier": 5,
+      "tick": 1,
+      "margin_ratio": 0.11,
+      "fee_per_lot": 1,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "PP0": {
+      "name": "聚丙烯",
+      "exchange": "DCE",
+      "multiplier": 5,
+      "tick": 1,
+      "margin_ratio": 0.11,
+      "fee_per_lot": 1,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "EG0": {
+      "name": "乙二醇",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "EB0": {
+      "name": "苯乙烯",
+      "exchange": "DCE",
+      "multiplier": 5,
+      "tick": 1,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "PG0": {
+      "name": "液化石油气",
+      "exchange": "DCE",
+      "multiplier": 20,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 6,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "LG0": {
+      "name": "原木",
+      "exchange": "DCE",
+      "multiplier": 90,
+      "tick": 0.5,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0002,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ]
+    },
+    "FB0": {
+      "name": "纤维板",
+      "exchange": "DCE",
+      "multiplier": 10,
+      "tick": 0.5,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ],
+      "active": false
+    },
+    "BB0": {
+      "name": "胶合板",
+      "exchange": "DCE",
+      "multiplier": 500,
+      "tick": 0.05,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ],
+      "active": false
+    },
+    "SR0": {
+      "name": "白糖",
+      "exchange": "CZCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "CF0": {
+      "name": "棉花",
+      "exchange": "CZCE",
+      "multiplier": 5,
+      "tick": 5,
+      "margin_ratio": 0.11,
+      "fee_per_lot": 4.3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "CY0": {
+      "name": "棉纱",
+      "exchange": "CZCE",
+      "multiplier": 5,
+      "tick": 5,
+      "margin_ratio": 0.11,
+      "fee_per_lot": 4,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "TA0": {
+      "name": "PTA",
+      "exchange": "CZCE",
+      "multiplier": 5,
+      "tick": 2,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "MA0": {
+      "name": "甲醇",
+      "exchange": "CZCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 2,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "FG0": {
+      "name": "玻璃",
+      "exchange": "CZCE",
+      "multiplier": 20,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 6,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "SA0": {
+      "name": "纯碱",
+      "exchange": "CZCE",
+      "multiplier": 20,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 3.5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "RM0": {
+      "name": "菜粕",
+      "exchange": "CZCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 1.5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "OI0": {
+      "name": "菜油",
+      "exchange": "CZCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 2,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "RS0": {
+      "name": "菜籽",
+      "exchange": "CZCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.2,
+      "fee_per_lot": 2,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ],
+      "active": false
+    },
+    "ZC0": {
+      "name": "动力煤",
+      "exchange": "CZCE",
+      "multiplier": 100,
+      "tick": 0.2,
+      "margin_ratio": 0.5,
+      "fee_per_lot": 150,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ],
+      "active": false
+    },
+    "SF0": {
+      "name": "硅铁",
+      "exchange": "CZCE",
+      "multiplier": 5,
+      "tick": 2,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ]
+    },
+    "SM0": {
+      "name": "锰硅",
+      "exchange": "CZCE",
+      "multiplier": 5,
+      "tick": 2,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ]
+    },
+    "UR0": {
+      "name": "尿素",
+      "exchange": "CZCE",
+      "multiplier": 20,
+      "tick": 1,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "AP0": {
+      "name": "苹果",
+      "exchange": "CZCE",
+      "multiplier": 10,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ]
+    },
+    "CJ0": {
+      "name": "红枣",
+      "exchange": "CZCE",
+      "multiplier": 5,
+      "tick": 5,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ]
+    },
+    "PF0": {
+      "name": "短纤",
+      "exchange": "CZCE",
+      "multiplier": 5,
+      "tick": 2,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "PK0": {
+      "name": "花生",
+      "exchange": "CZCE",
+      "multiplier": 5,
+      "tick": 2,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 4,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "SH0": {
+      "name": "烧碱",
+      "exchange": "CZCE",
+      "multiplier": 30,
+      "tick": 1,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 4,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "PX0": {
+      "name": "对二甲苯",
+      "exchange": "CZCE",
+      "multiplier": 5,
+      "tick": 2,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "PR0": {
+      "name": "瓶片",
+      "exchange": "CZCE",
+      "multiplier": 15,
+      "tick": 2,
+      "margin_ratio": 0.1,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "WH0": {
+      "name": "强麦",
+      "exchange": "CZCE",
+      "multiplier": 20,
+      "tick": 1,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ],
+      "active": false
+    },
+    "PM0": {
+      "name": "普麦",
+      "exchange": "CZCE",
+      "multiplier": 50,
+      "tick": 1,
+      "margin_ratio": 0.2,
+      "fee_per_lot": 5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ],
+      "active": false
+    },
+    "JR0": {
+      "name": "粳稻",
+      "exchange": "CZCE",
+      "multiplier": 20,
+      "tick": 1,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ],
+      "active": false
+    },
+    "RI0": {
+      "name": "早籼稻",
+      "exchange": "CZCE",
+      "multiplier": 20,
+      "tick": 1,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 2.5,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ],
+      "active": false
+    },
+    "LR0": {
+      "name": "晚籼稻",
+      "exchange": "CZCE",
+      "multiplier": 20,
+      "tick": 1,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ],
+      "active": false
+    },
+    "IF0": {
+      "name": "沪深300",
+      "exchange": "CFFEX",
+      "multiplier": 300,
+      "tick": 0.2,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 0,
+      "fee_rate": 2.3e-05,
+      "sessions": [
+        [
+          "09:30",
+          "11:30"
+        ],
+        [
+          "13:00",
+          "15:00"
+        ]
+      ]
+    },
+    "IH0": {
+      "name": "上证50",
+      "exchange": "CFFEX",
+      "multiplier": 300,
+      "tick": 0.2,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 0,
+      "fee_rate": 2.3e-05,
+      "sessions": [
+        [
+          "09:30",
+          "11:30"
+        ],
+        [
+          "13:00",
+          "15:00"
+        ]
+      ]
+    },
+    "IC0": {
+      "name": "中证500",
+      "exchange": "CFFEX",
+      "multiplier": 200,
+      "tick": 0.2,
+      "margin_ratio": 0.14,
+      "fee_per_lot": 0,
+      "fee_rate": 2.3e-05,
+      "sessions": [
+        [
+          "09:30",
+          "11:30"
+        ],
+        [
+          "13:00",
+          "15:00"
+        ]
+      ]
+    },
+    "IM0": {
+      "name": "中证1000",
+      "exchange": "CFFEX",
+      "multiplier": 200,
+      "tick": 0.2,
+      "margin_ratio": 0.15,
+      "fee_per_lot": 0,
+      "fee_rate": 2.3e-05,
+      "sessions": [
+        [
+          "09:30",
+          "11:30"
+        ],
+        [
+          "13:00",
+          "15:00"
+        ]
+      ]
+    },
+    "TS0": {
+      "name": "2年国债",
+      "exchange": "CFFEX",
+      "multiplier": 20000,
+      "tick": 0.002,
+      "margin_ratio": 0.005,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:30",
+          "11:30"
+        ],
+        [
+          "13:00",
+          "15:15"
+        ]
+      ]
+    },
+    "TF0": {
+      "name": "5年国债",
+      "exchange": "CFFEX",
+      "multiplier": 10000,
+      "tick": 0.005,
+      "margin_ratio": 0.012,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:30",
+          "11:30"
+        ],
+        [
+          "13:00",
+          "15:15"
+        ]
+      ]
+    },
+    "T0": {
+      "name": "10年国债",
+      "exchange": "CFFEX",
+      "multiplier": 10000,
+      "tick": 0.005,
+      "margin_ratio": 0.025,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:30",
+          "11:30"
+        ],
+        [
+          "13:00",
+          "15:15"
+        ]
+      ]
+    },
+    "TL0": {
+      "name": "30年国债",
+      "exchange": "CFFEX",
+      "multiplier": 10000,
+      "tick": 0.01,
+      "margin_ratio": 0.035,
+      "fee_per_lot": 3,
+      "fee_rate": 0,
+      "sessions": [
+        [
+          "09:30",
+          "11:30"
+        ],
+        [
+          "13:00",
+          "15:15"
+        ]
+      ]
+    },
+    "SI0": {
+      "name": "工业硅",
+      "exchange": "GFEX",
+      "multiplier": 5,
+      "tick": 5,
+      "margin_ratio": 0.12,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ]
+    },
+    "LC0": {
+      "name": "碳酸锂",
+      "exchange": "GFEX",
+      "multiplier": 1,
+      "tick": 20,
+      "margin_ratio": 0.13,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ],
+        [
+          "21:00",
+          "23:00"
+        ]
+      ]
+    },
+    "PS0": {
+      "name": "多晶硅",
+      "exchange": "GFEX",
+      "multiplier": 3,
+      "tick": 5,
+      "margin_ratio": 0.14,
+      "fee_per_lot": 0,
+      "fee_rate": 0.0001,
+      "sessions": [
+        [
+          "09:00",
+          "10:15"
+        ],
+        [
+          "10:30",
+          "11:30"
+        ],
+        [
+          "13:30",
+          "15:00"
+        ]
+      ]
+    }
+  }
+}

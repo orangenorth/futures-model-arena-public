@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>四模型期货竞赛</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E⚔%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/style.css">
+<script src="/static/vendor/echarts.min.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">⚔</span>
+    <div>
+      <div id="comp-name" class="title">四模型期货竞赛</div>
+      <div class="sub"><span id="comp-market">-</span> · 第 <span id="round-no">0</span> 轮 · 开始于 <span id="started-at">-</span></div>
+    </div>
+  </div>
+  <div class="status">
+    <span id="status-pill" class="pill">初始化</span>
+    <span class="muted">下次决策 <b id="countdown">-</b></span>
+    <span class="muted">行情源 <b id="source-health">-</b></span>
+    <span class="muted">行情时间 <b id="last-tick">-</b></span>
+  </div>
+  <div class="controls">
+    <button id="btn-pause" class="btn">暂停</button>
+    <button id="btn-round" class="btn">立即决策</button>
+    <button id="btn-reset" class="btn danger">重置竞赛</button>
+    <a class="btn ghost" href="/api/export/trades.csv" download>导出成交</a>
+    <a class="btn ghost" href="/api/export/equity.csv" download>导出权益</a>
+  </div>
+</header>
+
+<main>
+  <section id="leaderboard" class="cards"></section>
+
+  <section class="panel research-scan-panel" id="research-scan-panel" aria-labelledby="research-scan-title">
+    <div class="panel-head">
+      <div>
+        <div class="section-kicker">独立行情研究 · 手动扫描不直接调用模型</div>
+        <h2 id="research-scan-title">全量合约技术扫描</h2>
+        <p class="decision-room-note">分母来自已校验的候选目录；失败项会保留排除原因。本面板手动扫描不下单或直接调用模型。赛前决策室会另建一份全量研究快照，覆盖完整时仅向模型提供有界汇总与代表性事实。</p>
+      </div>
+      <div class="decision-room-actions">
+        <span id="research-scan-status" class="research-status" aria-live="polite">尚未扫描</span>
+        <button id="btn-research-scan" class="btn research-btn" type="button">更新全量扫描</button>
+      </div>
+    </div>
+    <div id="research-scan-summary" class="research-card-body"></div>
+    <div class="scroll research-scan-scroll">
+      <table class="tbl" id="research-scan-tbl">
+        <thead><tr><th>代码</th><th>中文名</th><th>交易所</th><th>本轮结果</th><th>最新价</th><th>涨跌</th><th>趋势</th><th>得分 / 排除原因</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel product-research-panel" id="product-research-panel" aria-labelledby="product-research-title">
+    <div class="panel-head">
+      <div>
+        <div class="section-kicker">全品种赛前论证 · 逐品种独立四模型双轮</div>
+        <h2 id="product-research-title">全品种策略辩论覆盖</h2>
+        <p id="product-research-note" class="decision-room-note">每个品种映射为一个上游连续合约（X0），不扩大为全部交割合约。批次仅限制调度窗口，不能共享模型结论。</p>
+      </div>
+      <div class="decision-room-actions">
+        <span id="product-research-status" class="research-status" aria-live="polite">尚未运行</span>
+        <button id="btn-product-research" class="btn research-btn" type="button">启动全品种论证</button>
+        <button id="btn-product-research-resume" class="btn ghost" type="button" hidden>续跑</button>
+        <button id="btn-product-research-retry" class="btn ghost" type="button" hidden>补跑确定性失败项</button>
+      </div>
+    </div>
+    <div id="product-research-summary" class="research-card-body"></div>
+    <div class="scroll product-research-scroll">
+      <table class="tbl" id="product-research-tbl">
+        <thead><tr><th>品种 / 映射</th><th>批次</th><th>任务状态</th><th>四模型开场</th><th>四模型反证</th><th>原因 / 结果</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="product-research-pager"><button id="product-research-prev" class="btn ghost" type="button">上一页</button><span id="product-research-page" class="muted"></span><button id="product-research-next" class="btn ghost" type="button">下一页</button></div>
+  </section>
+
+  <section class="panel decision-room" aria-labelledby="decision-room-title">
+    <div class="panel-head decision-room-head">
+      <div>
+        <div class="section-kicker">兼容概览 · 不参与下单</div>
+        <h2 id="decision-room-title">赛前市场概览辩论（非全品种）</h2>
+        <p id="debate-source" class="decision-room-note">这是代表性品种的兼容概览；全品种请使用上方“全品种策略辩论覆盖”。</p>
+      </div>
+      <div class="decision-room-actions">
+        <span id="debate-status" class="research-status" aria-live="polite">尚未生成研究</span>
+        <button id="btn-debate" class="btn research-btn" type="button">生成概览研究（非全品种）</button>
+        <button id="btn-debate-retry" class="btn research-btn" type="button" hidden>重新获取全量行情并重跑</button>
+      </div>
+    </div>
+    <div id="debate-timeline" class="debate-timeline" aria-label="研究阶段"></div>
+    <div class="debate-overview">
+      <article class="research-card" aria-labelledby="global-analysis-title">
+        <div class="research-card-head"><span class="eyebrow">冻结事实集</span><h3 id="global-analysis-title">研究范围与技术宽度</h3></div>
+        <div id="debate-global" class="research-card-body"></div>
+      </article>
+      <article class="research-card referee-card" aria-labelledby="referee-title">
+        <div class="research-card-head"><span class="eyebrow">人工 / Codex</span><h3 id="referee-title">仲裁席</h3></div>
+        <div id="debate-referee" class="research-card-body"></div>
+      </article>
+    </div>
+    <div class="research-section-head"><h3>四方独立陈述</h3><span>相同事实集 · 不含任何账户、持仓或交易指令</span></div>
+    <div id="debate-models" class="debate-models"></div>
+    <div class="research-section-head"><h3>定向反证</h3><span>每位模型只挑战一项可核验论点</span></div>
+    <div id="debate-rebuttals" class="debate-rebuttals"></div>
+    <div class="debate-history-wrap">
+      <div><span class="eyebrow">只读回放</span><p>历史记录不会重新调用模型，也不会触发交易。</p></div>
+      <div id="debate-history" class="debate-history" aria-label="研究会话历史"></div>
+    </div>
+  </section>
+
+  <section class="panel chart-panel">
+    <div class="panel-head">
+      <h2>权益曲线</h2>
+      <div class="seg" id="range-seg">
+        <button data-range="1d">1天</button><button data-range="1w">1周</button><button data-range="1m">1月</button><button data-range="all" class="on">全部</button>
+        <span class="divider"></span>
+        <button id="pct-toggle">收益率%</button>
+      </div>
+    </div>
+    <div id="equity-chart" class="chart"></div>
+  </section>
+
+  <div class="two-col">
+    <section class="panel">
+      <div class="panel-head"><h2>行情</h2></div>
+      <table class="tbl" id="quotes-tbl"><thead><tr><th>品种</th><th>最新价</th><th>涨跌</th><th>资金费率</th></tr></thead><tbody></tbody></table>
+    </section>
+    <section class="panel">
+      <div class="panel-head"><h2>阶段性结果（按日）</h2></div>
+      <div class="scroll"><table class="tbl" id="daily-tbl"><thead></thead><tbody></tbody></table></div>
+    </section>
+  </div>
+
+  <section class="panel" id="universe-panel" aria-labelledby="universe-title">
+    <div class="panel-head">
+      <div>
+        <div class="section-kicker">只读发现结果 · 不参与撮合</div>
+        <h2 id="universe-title">品种宇宙（候选目录）</h2>
+      </div>
+      <div class="universe-meta">
+        <span class="muted">来源 <b id="universe-source">-</b></span>
+        <span class="muted">更新于 <b id="universe-fetched">-</b></span>
+        <span class="muted">候选总数 <b id="universe-count">-</b></span>
+        <span class="muted">快照 <b id="universe-snapshot">-</b></span>
+        <span class="muted">台账 <b id="admission-summary">-</b></span>
+      </div>
+    </div>
+    <p class="universe-note" id="universe-note">
+      候选目录是对公开代码表的只读发现结果，<b>不是</b>默认交易池，也不代表交易所核验或可下单授权。
+      本期<b>未对任何候选做交易所条款核验</b>，「核验状态」一律为未核验。
+      目录不含合约乘数、最小变动价位、保证金比例、手续费与交易时段；候选数量随上市/退市与上游口径变化，不是固定常量。
+      「本地规格」仅表示本仓库已有一份近似参数，「本期启用」仅表示当前竞赛正在交易该品种。
+      「准入台账」与「证据覆盖」只反映条款证据<b>准备到哪一步</b>（未开始／已阻断／待人工复核），
+      既不代表交易所条款核验，也不构成任何下单授权；台账中的拟议数值不在看板展示，需查阅台账文件与其中引用的公开来源。
+    </p>
+    <div class="universe-toolbar">
+      <input id="universe-filter" type="search" placeholder="筛选代码 / 名称 / 交易所" autocomplete="off" aria-label="筛选候选品种">
+      <span id="universe-shown" class="muted"></span>
+    </div>
+    <div class="scroll universe-scroll">
+      <table class="tbl" id="universe-tbl">
+        <thead><tr><th>代码</th><th>中文名</th><th>交易所</th><th>报价</th><th>5m</th><th>15m</th><th>1h</th><th>本地规格</th><th>本期启用</th><th>核验状态</th><th>准入台账</th><th>证据覆盖</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>模型详情</h2>
+      <div class="seg" id="trader-tabs"></div>
+      <div class="seg" id="detail-tabs">
+        <button data-tab="positions" class="on">持仓明细</button>
+        <button data-tab="trades">历史成交</button>
+        <button data-tab="decisions">决策日志</button>
+      </div>
+    </div>
+    <div id="detail-body"></div>
+    <div class="pager"><button id="pg-prev" class="btn ghost">上一页</button><span id="pg-info"></span><button id="pg-next" class="btn ghost">下一页</button></div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><h2>系统事件</h2></div>
+    <div class="scroll small"><table class="tbl" id="events-tbl"><tbody></tbody></table></div>
+  </section>
+</main>
+
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-body">
+    <div class="modal-box" tabindex="-1"><div class="modal-head"><span id="modal-title"></span><button id="modal-close" class="btn ghost" type="button">关闭</button></div><pre id="modal-body"></pre></div>
+  </div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

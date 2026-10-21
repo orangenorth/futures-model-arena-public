@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+
+# 本地运行产生的数据与日志
+data/
+logs/
+config/config.yaml
+.env

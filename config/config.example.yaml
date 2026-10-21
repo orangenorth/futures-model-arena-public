@@ -1,0 +1,235 @@
+# 四模型期货竞赛 - 配置模板
+# 复制为 config/config.yaml 后按需修改（config/config.yaml 已在 .gitignore 中，不会被提交）。
+#
+# !!! 不要把真实 API Key 写进本模板文件：本文件会随仓库提交并公开。
+# 填 Key 的两种方式：
+#   1) 在 config/config.yaml 里把 Key 写到 api_key 字段；
+#   2) 或设置环境变量（DEEPSEEK_API_KEY 等），api_key_env 填的是环境变量的“名字”，不是 Key 本身。
+
+competition:
+  name: "四模型期货竞赛"
+  market: cn_futures          # cn_futures(新浪HTTP) | ctp(期货公司程序化接入) | crypto | replay
+  initial_cash: 80000         # 每个模型的起始资金（cn_futures 为 CNY；crypto 建议 10000 USDT）
+  decision_interval_sec: 300  # 决策轮间隔（开市时）；国内建议 300，加密建议 600
+  tick_interval_sec: 20       # 盯市间隔：刷新最新价、检查止损止盈/强平
+  snapshot_interval_sec: 60   # 权益快照写库间隔
+  timezone: "Asia/Shanghai"
+
+# 交易品种（新浪主力连续代码；crypto 时填 BTC-USDT-SWAP 等）
+#
+# symbols: all —— 展开成 config/contracts_cn.json 里全部 active 的品种（当前 71 个），
+# 也就是一个权限齐备的境内期货账户能下单、且还有活跃行情的全部品种。
+# **老装机请优先用这一行**：config/config.yaml 在 .gitignore 里，不会随仓库更新，
+# 改这一行比手抄七十一个代码省事，以后合约表增删品种也自动跟上。
+#
+# 代价随品种数线性上升：71 个品种的行情快照约 7.4k token，四个模型每轮合计约 30k 输入 token。
+# 行情请求量不会跟着线性放大：报价走批量 list=（每 tick 两次请求），K 线按周期分档缓存
+# （5m/15m/1h = 60s/300s/900s）。
+#
+# 只想跑一部分就把 all 换成下面那个显式名单，再按交易所分组删行。
+# 合约表里另有 11 个标了 active: false 的品种（线材 WR0、纤维板 FB0、胶合板 BB0、粳米 RR0、
+# 油菜籽 RS0、动力煤 ZC0、强麦 WH0、普麦 PM0、粳稻 JR0、早籼稻 RI0、晚籼稻 LR0）：它们常年
+# 几乎没有成交，all 不会展开到它们；确实要跑就在显式名单里写上代码。流动性会随时间变化，
+# 加之前请按自己账户看到的实际成交量核对。
+symbols: all
+
+# 显式名单（把上面那行换成下面这段即可）：
+# symbols: [
+#   # 上期所
+#   CU0, AL0, ZN0, PB0, NI0, SN0, AU0, AG0, RB0, HC0, SS0, BU0, RU0, SP0, FU0, AO0, BR0,
+#   # 上期能源
+#   SC0, LU0, NR0, BC0, EC0,
+#   # 大商所
+#   A0, B0, M0, Y0, P0, C0, CS0, JD0, LH0, I0, J0, JM0, L0, V0, PP0, EG0, EB0, PG0, LG0,
+#   # 郑商所
+#   SR0, CF0, CY0, TA0, MA0, FG0, SA0, RM0, OI0, SF0, SM0, UR0, AP0, CJ0, PF0, PK0, SH0, PX0, PR0,
+#   # 中金所（股指与国债，需金融期货交易编码）
+#   IF0, IH0, IC0, IM0, TS0, TF0, T0, TL0,
+#   # 广期所
+#   SI0, LC0, PS0
+# ]
+
+market_data:
+  cn_futures:
+    contracts_file: config/contracts_cn.json
+    timeout_sec: 10
+  crypto:
+    provider: okx             # okx | binance
+    timeout_sec: 10
+  replay:
+    seed: 42
+    bar_seconds: 60
+    start_price: { RB0: 3400, I0: 780, AU0: 560, AG0: 7200, CU0: 72000, SC0: 520, M0: 3100, TA0: 5800 }
+  # CTP 行情（competition.market 设为 ctp 时生效）。凭证由期货公司开通程序化后单独下发，
+  # 与手机/桌面终端登录用的是同一个投资者编码，但必须走程序化接入才能连行情前置。
+  # 需要先装 SDK：pip install openctp-ctp
+  ctp:
+    md_front: ""              # 行情前置地址，形如 tcp://<前置IP>:<端口>（向期货公司索取）
+    broker_id: ""             # 经纪商代码
+    user_id: ""               # 投资者编码；也可留空并用 user_id_env 从环境变量读
+    user_id_env: ""
+    password_env: CTP_PASSWORD   # 只写环境变量名。绝不要把密码写进这个文件
+    instruments: {}           # 指定合约，如 { RB0: rb2601 }；留空则按持仓量自动选主力
+    auto_months: 12           # 自动选主力时，每个品种订阅未来多少个月的候选合约（下限：
+                              # 窗口至少延到当月之后下一个挂牌交割月，当月合约月中就到期）
+    flow_dir: data/ctp_flow   # CTP 的状态文件目录（不要提交）
+    connect_timeout_sec: 20
+    bar_seconds: 60           # tick 聚合成多长的 bar；5m/15m/1h 由它重采样。
+                              # 必须能整除 300 秒（快照每次都先要 5m）且不短于 10 秒：
+                              # 10/15/30/60/150/300 等可用；900 以上、90/200 这类、或 1~5 秒
+                              # 都会在启动时被拒绝并说明原因（越短则下面的 max_bars 要留得越多）
+    max_bars: 3600            # 每个品种在内存里保留多少根基础 bar。1h 的 ema60 要 60 根 1h，
+                              # 也就是 60*3600/bar_seconds 根基础 bar（60s → 3600，30s → 7200）；
+                              # 配小了不报错，只是 1h 的慢指标永远算不出来，所以会被自动抬到这个下限
+    dominant_stale_sec: 300   # 合约安静这么久（按观察到的交易时长算，休市不计）就退出主力候选：
+                              # 到期/停牌的合约最后那个持仓量会永远留着，不剔除则后继合约的行情一直被丢掉
+    persist_bars: true        # 1m bar 落库，重启后预热而不是从零积累
+
+risk:
+  max_positions: 4            # 单模型最多同时持有的品种数
+  max_leverage: 5             # crypto 杠杆上限；cn_futures 由保证金比例决定，此项作为名义/权益倍数上限
+  max_notional_pct: 0.30      # 单品种名义价值不超过权益的比例（cn_futures 指保证金占用比例上限）
+  max_size_pct: 0.30          # 单次开仓 size_pct 上限
+  require_stop_loss: true     # 开仓必须带止损（缺失时引擎自动按 ATR 补一个）
+  auto_stop_atr_mult: 2.0
+  slippage_ticks: 1
+  min_hold_sec: 120           # 开仓后最短持仓时间（防止同轮反复开平）
+  target_margin_risk_min_ratio: 0.80 # 有充分信号时追求的总风险度下沿；不是强制开仓要求
+  target_margin_risk_max_ratio: 0.90 # 正常开/加仓后的目标上沿；达到后不再新增风险
+  warning_margin_risk_ratio: 0.90 # 风险度达到 90% 时看板发出警戒提示
+  max_margin_risk_ratio: 0.95 # 新开/加仓后的总风险度（保证金占用/权益）不得超过 95%
+  liquidation_risk_ratio: 1.0 # 风险度(保证金占用/权益) ≥ 此值强平
+
+llm:
+  timeout_sec: 60
+  max_retries: 2
+  temperature: 0.3
+  max_tokens: 1500
+  json_mode: true             # 使用 response_format=json_object（不支持的模型自动回退）
+  breaker_failures: 3         # 连续失败 N 次后熔断
+  breaker_skip_rounds: 3      # 熔断后跳过的轮数
+
+# 赛前多空决策室：统一市场快照 → 四模型独立陈述 → 互相反证 → 生成 Codex 仲裁包。
+# 默认关闭，避免首次启动就在盘前产生 8 次模型调用；开启后仅在 09:00 / 13:30 / 21:00 前的窗口自动运行。
+preopen_debate:
+  enabled: false
+  lead_window_sec: 1800       # 开盘前 30 分钟内触发一次
+  max_quote_age_sec: 900      # 行情源最近成功刷新不得超过 15 分钟；盘前允许引用上一交易时段的最后报价
+  stage_timeout_sec: 60       # 每轮四模型并行等待上限（秒）；不改变普通决策请求时限
+  max_output_tokens: 700      # 每个模型每轮的最大输出；一场完整辩论最多 8 次调用
+
+# 全品种赛前论证：动态刷新连续合约目录 → 实际行情/历史扫描 → 每个符合条件品种各自四模型两轮。
+# 只影响研究层；symbols、风险、持仓上限和自动下单范围保持不变。
+product_research:
+  enabled: true
+  candidate_batch_size: 8     # 仅调度窗口；后续批次继续，绝不是总覆盖上限
+  model_concurrency: 4        # 同时在飞的模型请求上限，独立于批大小
+  max_attempts: 2             # 仅重试有明确失败回执的调用；投递状态不确定不会自动重发
+  manual_retry_limit: 1       # 自动尝试耗尽后，整次运行最多允许一次人工失败项补跑轮次
+  retry_backoff_sec: 1
+  stage_timeout_sec: 75
+  discovery_timeout_sec: 10
+  discovery_workers: 4
+  max_output_tokens: 700
+
+traders:
+  - id: deepseek
+    name: DeepSeek
+    color: "#3b82f6"
+    provider: openai_compatible
+    base_url: https://api.deepseek.com/v1
+    model: deepseek-chat
+    api_key_env: DEEPSEEK_API_KEY
+    api_key: ""
+    api_style: chat
+    fallback_rule: trend        # 无 Key 时使用的演示策略：trend | meanrev | breakout | conservative
+  - id: qwen
+    name: 通义千问
+    color: "#8b5cf6"
+    provider: openai_compatible
+    base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+    model: qwen3.8-max
+    api_key_env: DASHSCOPE_API_KEY
+    api_key: ""
+    api_style: chat
+    reasoning_effort: low
+    # This caps total completion work in ordinary decisions without reusing the smaller research cap.
+    max_completion_tokens: 3584
+    # This cap applies only to the bounded preopen research request.
+    research_max_completion_tokens: 1536
+    max_retries: 0 # One bounded outer attempt per decision; it does not imply provider availability.
+    fallback_rule: meanrev
+  - id: kimi
+    name: Kimi K3
+    color: "#10b981"
+    provider: openai_compatible
+    base_url: https://api.moonshot.cn/v1 # International-platform keys use https://api.moonshot.ai/v1.
+    model: kimi-k3
+    api_key_env: MOONSHOT_API_KEY
+    api_key: ""
+    api_style: chat
+    temperature: 1.0 # Kimi K3 requires a fixed temperature of 1.0.
+    max_completion_tokens: 4096
+    reasoning_effort: low
+    fallback_rule: breakout
+  - id: glm
+    name: 智谱 GLM-5.3
+    color: "#f59e0b"
+    provider: openai_compatible
+    # 智谱开放平台原生 OpenAI 兼容接口；与通义使用不同的提供商凭据。
+    base_url: https://open.bigmodel.cn/api/paas/v4
+    model: glm-5.3
+    api_key_env: ZHIPU_API_KEY
+    api_key: ""
+    api_style: chat
+    max_tokens: 4096
+    reasoning_effort: low
+    max_retries: 0 # One bounded outer attempt per decision; it does not imply provider availability.
+    fallback_rule: conservative
+
+  # ── 可选席位：OpenAI ────────────────────────────────────────────────────────
+  # 取消注释即可让 OpenAI 模型参赛（可替换上面任一席位，或作为第五位）。新版 OpenAI 模型只认
+  # max_completion_tokens；model 换成你账号可用的模型名。
+  # - id: openai
+  #   name: OpenAI
+  #   color: "#14b8a6"
+  #   provider: openai_compatible
+  #   base_url: https://api.openai.com/v1
+  #   model: gpt-5
+  #   api_key_env: OPENAI_API_KEY
+  #   api_key: ""
+  #   api_style: chat
+  #   max_completion_tokens: 4096
+  #   reasoning_effort: low
+  #   fallback_rule: trend
+
+  # ── 可选席位：Jev（TypeSafe System One 决策模型）─────────────────────────────
+  # 取消注释即可参赛。Jev 不生成正文，而是对一个「状态 + 类型化问题」返回
+  # choice / score / noul 三类答案及其概率分布与 confidence；订单在本地代码里组合，
+  # 因此没有 LLM 席位那些「输出被截断 / JSON 解析失败 / 空回复」的失效模式。
+  # 每个品种各一道「开多 / 开空 / 不开」题，取所选项概率最高的那个；概率低于门限时空仓观望。
+  # 计费按服务返回的 usage 原样记录（托管服务也计输出 token；实测 63 个品种一轮约 2 万输入 token）。
+  # 官方托管服务需要 API Key（TYPESAFE_API_KEY）；实现同一 schema 的本地服务
+  # （如 LitJev）不需要 Key，只填 base_url 即可。
+  # - id: jev
+  #   name: Jev (System One)
+  #   color: "#ef4444"
+  #   provider: jev
+  #   base_url: https://api.typesafe.ai
+  #   model: jev-latest
+  #   api_key_env: TYPESAFE_API_KEY
+  #   api_key: ""
+  #   jev_min_confidence: 0.55    # 最强候选所选方向的概率低于此值就空仓观望（不是答案里的 confidence 字段）
+  #   fallback_rule: conservative # 未配置 base_url 时使用的演示策略
+
+storage:
+  db_path: data/arena.db
+  log_dir: logs
+
+server:
+  host: 127.0.0.1
+  port: 0                     # 0 = 自动选空闲端口；固定端口便于用浏览器书签打开
+  prevent_sleep: true         # Windows 下阻止系统休眠
+  allowed_hosts: []           # 仅当 host 改成 0.0.0.0 时需要：列出访问看板用的主机名，
+                              # 例如 [arena.lan]；否则写接口只接受回环地址（防 DNS 重绑定）
+  allow_remote_control: false # 仅本机可暂停/重置/发起付费研究；局域网部署需显式改为 true

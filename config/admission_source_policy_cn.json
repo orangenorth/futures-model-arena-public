@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "kind": "contract_admission_source_policy",
+  "note": "Local provenance policy for admission-ledger evidence: the exact first-party HTTPS hostnames that may be cited for each exchange. Matching is exact -- no suffix, substring, wildcard or DNS resolution -- so a lookalike host is simply a different host. INE's SHFE hosts are a listed exception, not an inferred parent-domain rule. This document carries no contract term, no candidate value, no citation and no credential; passing it proves a source is first party, never that a term is verified or that anything may be traded.",
+  "policy_fingerprint": "sha256:761c27c5b05c4cf45f9aa829ae9d62cb1d4b26f01d1794fe83147d129eaa6653",
+  "exchange_hosts": {
+    "CFFEX": [
+      "www.cffex.com.cn",
+      "cffex.com.cn"
+    ],
+    "CZCE": [
+      "www.czce.com.cn",
+      "czce.com.cn"
+    ],
+    "DCE": [
+      "www.dce.com.cn",
+      "dce.com.cn"
+    ],
+    "GFEX": [
+      "www.gfex.com.cn",
+      "gfex.com.cn"
+    ],
+    "INE": [
+      "www.ine.cn",
+      "ine.cn",
+      "www.shfe.com.cn",
+      "shfe.com.cn"
+    ],
+    "SHFE": [
+      "www.shfe.com.cn",
+      "shfe.com.cn"
+    ]
+  }
+}
