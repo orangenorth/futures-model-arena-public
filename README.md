@@ -109,10 +109,12 @@ python scripts\check_llm.py deepseek        # 换成 qwen / kimi / glm，或不�
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\build_exe.ps1
-# 产出 dist\FuturesArena\FuturesArena.exe，配置在 dist\FuturesArena\config\
+# 产出 dist\<本次构建编号>\FuturesArena\FuturesArena.exe，配置在同级 config\
 ```
 
 依赖 Windows 10/11 自带的 WebView2 运行时；窗口启动失败时自动改用系统浏览器打开看板。
+
+每次构建写入全新目录；也可用 `-OutputRoot <全新目录>` 指定输出位置。已有目录会被拒绝，旧安装的配置、数据库和日志不会被删除。包中包含六份公共配置资源，不包含真实 `config/config.yaml`。
 
 ## 竞赛规则（可在 config 中调整）
 

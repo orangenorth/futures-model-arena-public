@@ -3168,9 +3168,10 @@ class Engine:
             try:
                 if replay_bars is not None:
                     raw = replay_bars.get(s, [])
-                    b5 = ReplaySource.bars_for_period(raw, "5m", 120)
-                    b15 = ReplaySource.bars_for_period(raw, "15m", 100)
-                    b1h = ReplaySource.bars_for_period(raw, "1h", 100)
+                    bar_seconds = self.source.bar_seconds
+                    b5 = ReplaySource.bars_for_period(raw, "5m", 120, bar_seconds=bar_seconds)
+                    b15 = ReplaySource.bars_for_period(raw, "15m", 100, bar_seconds=bar_seconds)
+                    b1h = ReplaySource.bars_for_period(raw, "1h", 100, bar_seconds=bar_seconds)
                 else:
                     got = klines_map.get(s)
                     if got is None:

@@ -33,6 +33,8 @@ class ReplaySource:
         self._specs = specs
         self.tz = ZoneInfo(tz)   # CSV 中不带时区偏移的时间按此时区解析，不依赖主机时区
         self._lock = threading.RLock()
+        if isinstance(bar_seconds, bool) or not isinstance(bar_seconds, int) or bar_seconds < 1 or 300 % bar_seconds:
+            raise ValueError("replay.bar_seconds must be a positive integer that can divide 300 seconds")
         self.bar_seconds = bar_seconds
         self.history = history
         self.rng = random.Random(seed)
@@ -53,6 +55,17 @@ class ReplaySource:
             if csv_dir and (Path(csv_dir) / f"{s}.csv").exists():
                 rows = self._load_csv(Path(csv_dir) / f"{s}.csv")
             if rows:
+                if self.bar_seconds != 60:
+                    # A configured synthetic interval does not change CSV timestamps.
+                    # For non-default periods require evidence of the base cadence;
+                    # allow missing rows/session gaps, but never silently reinterpret
+                    # minute CSV data as (for example) thirty-second bars.
+                    gaps = [b.ts - a.ts for a, b in zip(rows, rows[1:])]
+                    if (not any(math.isclose(gap, self.bar_seconds, rel_tol=0, abs_tol=1e-6) for gap in gaps)
+                            or any(gap <= 0 or not math.isclose(gap / self.bar_seconds,
+                                                              round(gap / self.bar_seconds),
+                                                              rel_tol=0, abs_tol=1e-6) for gap in gaps)):
+                        raise ValueError(f"CSV base period for {s} cannot be verified as {self.bar_seconds} seconds")
                 self._csv_rows[s] = rows
                 self._csv_idx[s] = min(history, len(rows))
                 self.bars[s] = rows[: self._csv_idx[s]]
@@ -152,16 +165,23 @@ class ReplaySource:
             self._advance_unlocked(n)
 
     @staticmethod
-    def bars_for_period(bars: List[Bar], period: str, limit: int = 120, drop_forming: bool = True) -> List[Bar]:
-        """Derive a period from an immutable copy of 1-minute bars.
+    def bars_for_period(bars: List[Bar], period: str, limit: int = 120, drop_forming: bool = True,
+                        *, bar_seconds: int = 60) -> List[Bar]:
+        """Derive a period from immutable bars with their actual base duration.
 
-        drop_forming=True（默认）：先丢弃最后一根 1m bar（未走完的当前分钟）再聚合，
+        drop_forming=True（默认）：先丢弃最后一根基础 bar（尚未走完）再聚合，
         这样最后一根聚合 bar 一定是已收盘的。指标只基于已收盘的 bar 计算，
         与实盘侧（见 Engine._build_snapshot 的 safe_bars）口径一致。
         注意这是口径变更：同一份数据算出的指标与旧版本不同，回放结果不可比。
         """
-        mult = {"1m": 1, "5m": 5, "15m": 15, "30m": 30, "1h": 60, "1d": 240}.get(period, 1)
-        if mult == 1:
+        # Preserve the legacy four-hour replay trading-day convention.
+        seconds = {"1m": 60, "5m": 300, "15m": 900, "30m": 1800, "1h": 3600, "1d": 14400}.get(period, 60)
+        if (isinstance(bar_seconds, bool) or not isinstance(bar_seconds, int)
+                or bar_seconds < 1 or seconds % bar_seconds):
+            raise ValueError(f"cannot aggregate {bar_seconds!r}-second replay bars into {period}")
+        mult = seconds // bar_seconds
+        if seconds == 60 and bar_seconds == 60:
+            # Historical raw 1m reads include the current base bar.
             return bars[-limit:]
         src = bars[:-1] if drop_forming and bars else bars
         return aggregate(src, mult)[-limit:]
@@ -279,7 +299,7 @@ class ReplaySource:
     def klines(self, symbol: str, period: str, limit: int = 120) -> List[Bar]:
         with self._lock:
             bars = list(self.bars.get(symbol, []))
-        return self.bars_for_period(bars, period, limit)
+        return self.bars_for_period(bars, period, limit, bar_seconds=self.bar_seconds)
 
     def is_open(self, now: datetime, symbol: Optional[str] = None) -> bool:
         return True
