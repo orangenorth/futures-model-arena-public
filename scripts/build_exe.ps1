@@ -3,7 +3,7 @@
 # 文件带 UTF-8 BOM：Windows PowerShell 5.1 对无 BOM 脚本按系统 ANSI 代码页解码，中文会乱码
 param([string]$OutputRoot)
 $ErrorActionPreference = "Stop"
-Set-Location (Join-Path $PSScriptRoot "..")
+Set-Location -LiteralPath (Join-Path $PSScriptRoot "..")
 
 # Every build gets a fresh directory. Never replace a portable installation.
 $BuildId = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 8)
@@ -50,13 +50,22 @@ Invoke-Step "Install dependencies" { & $Python @PythonPrefix -m pip install -r r
 # CTP 行情 SDK 不是硬依赖（源码运行按需装），但打进 exe 之后用户没法再 pip install，所以打包时必须带上
 Invoke-Step "Install openctp-ctp" { & $Python @PythonPrefix -m pip install "openctp-ctp>=6.7" }
 Invoke-Step "Validate the CTP SDK" { & $Python @PythonPrefix -c "from openctp_ctp import mdapi; print(mdapi.CThostFtdcMdApi.GetApiVersion())" }
-Invoke-Step "Run tests" { & $Python @PythonPrefix -m pytest -q }
+# A relative collection target avoids treating brackets in the absolute cwd as a node ID.
+Invoke-Step "Run tests" { & $Python @PythonPrefix -m pytest tests/ -q }
 
 Invoke-Step "PyInstaller build" { & $Python @PythonPrefix -m PyInstaller arena.spec --noconfirm --distpath $OutputRoot --workpath $WorkDir }
 if (-not (Test-Path -LiteralPath (Join-Path $PackageDir 'FuturesArena.exe'))) { throw 'PyInstaller did not produce FuturesArena.exe.' }
 
 # 把可编辑的配置放到 exe 旁边（首次运行读取 config\config.yaml，没有则用模板）
-New-Item -ItemType Directory -Path (Join-Path $PackageDir 'config') -ErrorAction Stop | Out-Null
+$ConfigDir = Join-Path $PackageDir 'config'
+# Flat-layout packagers may already create this directory inside our fresh output.
+if (Test-Path -LiteralPath $ConfigDir) {
+    if (-not (Test-Path -LiteralPath $ConfigDir -PathType Container)) {
+        throw 'Packaged config path is not a directory.'
+    }
+} else {
+    New-Item -ItemType Directory -Path $ConfigDir -ErrorAction Stop | Out-Null
+}
 Copy-Item config\config.example.yaml (Join-Path $PackageDir 'config')
 Copy-Item config\demo.yaml (Join-Path $PackageDir 'config')
 Copy-Item config\contracts_cn.json (Join-Path $PackageDir 'config')
