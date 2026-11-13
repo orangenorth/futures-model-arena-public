@@ -109,10 +109,35 @@ python scripts\check_llm.py deepseek        # 换成 qwen / kimi / glm，或不�
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\build_exe.ps1
-# 产出 dist\FuturesArena\FuturesArena.exe，配置在 dist\FuturesArena\config\
+# 产出 dist\<本次构建编号>\FuturesArena\FuturesArena.exe，配置在同级 config\
 ```
 
 依赖 Windows 10/11 自带的 WebView2 运行时；窗口启动失败时自动改用系统浏览器打开看板。
+
+每次构建写入全新目录；也可用 `-OutputRoot <全新目录>` 指定输出位置。已有目录会被拒绝，旧安装的配置、数据库和日志不会被删除。包中包含六份公共配置资源，不包含真实 `config/config.yaml`。
+
+Source paths are treated literally, including spaces, Chinese characters, and square brackets.
+Keep the Python/PyInstaller environment itself in a path without square brackets: current
+PyInstaller hook discovery treats its installation path as a glob pattern and can silently
+miss hooks there. For a bracketed source path, use an external environment on `PATH` and do
+not place a project-local `.venv` under that path; the build prefers a local `.venv` when present.
+The source/output path fixes do not patch this upstream packager limitation.
+The build accepts a public `config` directory already created inside its fresh package by a
+flat-layout packager; it still rejects every existing `OutputRoot`, including empty directories.
+A failed or interrupted build keeps its partial output. Retry with a new output directory.
+Relative `OutputRoot` arguments are resolved against the launching process directory; use an
+absolute path when invoking the script from another directory. A new package does not migrate
+or automatically resume a database from an older installation.
+
+For an offline Windows package check, run `scripts/verify_windows_package.py` with
+`--package` (the built onedir folder), `--acceptance-root` (a new, nonexistent folder), and
+`--reference-config` (this checkout's public `config` folder). All three paths must be absolute
+and non-overlapping; the acceptance folder's parent must already exist. Use the build's Python
+environment. The verifier hashes all six external/bundled resources, scans for runtime/private
+payloads, and runs only copies with generated replay data and rule-based traders. It checks
+configuration selection, headless startup/shutdown, and bounded synthetic SQLite persistence.
+It does not test real accounts, a real installation upgrade, CTP connectivity, or the GUI.
+It never publishes a package. Keep its generated report and test copies outside the repository.
 
 ## 竞赛规则（可在 config 中调整）
 
