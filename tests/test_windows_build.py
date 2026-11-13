@@ -17,7 +17,27 @@ CONFIG_FILES = (
     "admission_source_policy_cn.json",
 )
 STAGES = ("version", "dependencies", "ctp_install", "ctp_check", "tests", "packager")
+# Hosted Windows PowerShell startup exceeded the former 30s/20s budgets in CI.
+# These are upper bounds, not delays: every wait returns as soon as it is ready.
+NATIVE_TIMEOUT_SECONDS = 120
+READY_TIMEOUT_SECONDS = 120
+CLEANUP_TIMEOUT_SECONDS = 30
+PACKAGER_HOLD_SECONDS = READY_TIMEOUT_SECONDS + NATIVE_TIMEOUT_SECONDS + CLEANUP_TIMEOUT_SECONDS
 pytestmark = pytest.mark.skipif(sys.platform != "win32", reason="Windows PowerShell entrypoint")
+
+
+def _wait_for_ready_marker(process, marker, timeout=READY_TIMEOUT_SECONDS):
+    deadline = time.monotonic() + timeout
+    while True:
+        returncode = process.poll()
+        if returncode is not None:
+            raise AssertionError(f"Build exited with code {returncode} before the interruption boundary")
+        if marker.is_file():
+            return
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError(f"Synthetic packager did not reach its wait point within {timeout}s")
+        time.sleep(min(0.05, remaining))
 
 
 @pytest.fixture(params=("windows-powershell", "pwsh"))
@@ -76,8 +96,10 @@ if stage == "packager":
     package.mkdir(parents=True, exist_ok=True)
     (package / "partial.bin").write_bytes(b"synthetic partial build")
     if os.environ.get("ARENA_TEST_HOLD_PACKAGER"):
-        (root / "waiting.json").write_text(json.dumps({"pid": os.getpid(), "output": str(out)}))
-        time.sleep(60)
+        marker = root / "waiting.tmp"
+        marker.write_text(json.dumps({"pid": os.getpid(), "output": str(out)}))
+        marker.replace(root / "waiting.json")
+        time.sleep(float(os.environ["ARENA_TEST_PACKAGER_HOLD_SECONDS"]))
     if os.environ.get("ARENA_TEST_FAIL_STAGE") == stage:
         raise SystemExit(9)
     if not os.environ.get("ARENA_TEST_MISSING_EXE"):
@@ -107,6 +129,7 @@ elif os.environ.get("ARENA_TEST_FAIL_STAGE") == stage:
             "TEMP": str(root / "temp"), "TMP": str(root / "temp"),
             "ARENA_TEST_REAL_PYTHON": sys.executable,
             "ARENA_TEST_FAKE_SCRIPT": str(stub),
+            "ARENA_TEST_PACKAGER_HOLD_SECONDS": str(PACKAGER_HOLD_SECONDS),
             "PYTHONDONTWRITEBYTECODE": "1", "PYTHONNOUSERSITE": "1",
         })
 
@@ -127,11 +150,29 @@ elif os.environ.get("ARENA_TEST_FAIL_STAGE") == stage:
     def invoke(self, output=None, extra_env=None, cwd=None):
         process = self.start(output, extra_env, cwd)
         try:
-            stdout, stderr = process.communicate(timeout=30)
-        except subprocess.TimeoutExpired:
-            self.stop(process)
-            raise
+            stdout, stderr = process.communicate(timeout=NATIVE_TIMEOUT_SECONDS)
+        except subprocess.TimeoutExpired as error:
+            stdout, stderr = self.stop(process)
+            raise AssertionError(
+                f"Build did not complete within {NATIVE_TIMEOUT_SECONDS}s; "
+                + self.diagnostics(process, stdout, stderr)
+            ) from error
         return subprocess.CompletedProcess(process.args, process.returncode, stdout, stderr)
+
+    def wait_until_ready(self, process):
+        try:
+            _wait_for_ready_marker(process, self.root / "waiting.json")
+        except (TimeoutError, AssertionError) as error:
+            stdout, stderr = self.stop(process)
+            raise AssertionError(f"{error}; " + self.diagnostics(process, stdout, stderr)) from error
+
+    def diagnostics(self, process, stdout, stderr):
+        try:
+            stages = [call["stage"] for call in self.calls()]
+        except (OSError, ValueError, KeyError) as error:
+            stages = [f"Stage log unavailable: {error}"]
+        return (f"observed stages={stages!r}; returncode={process.returncode}; "
+                f"stdout={(stdout or b'')[-4000:]!r}; stderr={(stderr or b'')[-4000:]!r}")
 
     @staticmethod
     def stop(process):
@@ -140,9 +181,10 @@ elif os.environ.get("ARENA_TEST_FAIL_STAGE") == stage:
             subprocess.run(
                 [str(Path(os.environ["SystemRoot"]) / "System32/taskkill.exe"),
                  "/PID", str(process.pid), "/T", "/F"],
-                capture_output=True, timeout=10, creationflags=subprocess.CREATE_NO_WINDOW,
+                capture_output=True, timeout=CLEANUP_TIMEOUT_SECONDS,
+                creationflags=subprocess.CREATE_NO_WINDOW,
             )
-        process.communicate(timeout=10)
+        return process.communicate(timeout=CLEANUP_TIMEOUT_SECONDS)
 
     def calls(self):
         path = self.root / "calls.jsonl"
@@ -331,11 +373,7 @@ def test_interruption_preserves_partial_and_retry_uses_fresh_output(build_fixtur
     output = fixture.root / "interrupted-output"
     process = fixture.start(output, {"ARENA_TEST_HOLD_PACKAGER": "1"})
     try:
-        deadline = time.monotonic() + 20
-        while not (fixture.root / "waiting.json").exists():
-            assert process.poll() is None, "Build stopped before the synthetic interruption boundary"
-            assert time.monotonic() < deadline, "Synthetic packager did not reach its wait point"
-            time.sleep(0.05)
+        fixture.wait_until_ready(process)
     finally:
         fixture.stop(process)
     assert process.returncode != 0
@@ -357,3 +395,88 @@ def test_relative_output_keeps_caller_directory_convention(build_fixture):
     assert result.returncode == 0, result.stdout + result.stderr
     _assert_public_config(fixture, fixture.root.parent / "relative output")
     assert not (fixture.root / "relative output").exists()
+
+
+def test_native_harness_budgets_cover_observed_ci_startup_delay():
+    assert NATIVE_TIMEOUT_SECONDS == READY_TIMEOUT_SECONDS == 120
+    assert PACKAGER_HOLD_SECONDS > READY_TIMEOUT_SECONDS + CLEANUP_TIMEOUT_SECONDS
+
+
+def test_ready_marker_returns_immediately_without_sleep(tmp_path, monkeypatch):
+    marker = tmp_path / "waiting.json"
+    marker.write_text("{}", encoding="ascii")
+    process = type("SyntheticProcess", (), {"poll": lambda self: None})()
+    monkeypatch.setattr(time, "sleep", lambda _: pytest.fail("Ready marker must not add a delay"))
+    _wait_for_ready_marker(process, marker, timeout=0.1)
+
+
+def test_ready_marker_waits_for_observation_with_a_bounded_clock(tmp_path, monkeypatch):
+    marker = tmp_path / "waiting.json"
+    process = type("SyntheticProcess", (), {"poll": lambda self: None})()
+    clock = {"now": 0.0, "polls": 0}
+    monkeypatch.setattr(time, "monotonic", lambda: clock["now"])
+
+    def advance(interval):
+        clock["now"] += interval
+        clock["polls"] += 1
+        if clock["polls"] == 2:
+            marker.write_text("{}", encoding="ascii")
+
+    monkeypatch.setattr(time, "sleep", advance)
+    _wait_for_ready_marker(process, marker, timeout=0.2)
+    assert clock["polls"] == 2 and clock["now"] < 0.2
+
+
+def test_ready_marker_timeout_is_bounded_without_real_waiting(tmp_path, monkeypatch):
+    process = type("SyntheticProcess", (), {"poll": lambda self: None})()
+    clock = {"now": 0.0}
+    monkeypatch.setattr(time, "monotonic", lambda: clock["now"])
+    monkeypatch.setattr(time, "sleep", lambda interval: clock.update(now=clock["now"] + interval))
+    with pytest.raises(TimeoutError, match="did not reach"):
+        _wait_for_ready_marker(process, tmp_path / "missing.json", timeout=0.1)
+    assert clock["now"] <= 0.15
+
+
+def test_exited_process_does_not_accept_a_stale_ready_marker(tmp_path, monkeypatch):
+    marker = tmp_path / "waiting.json"
+    marker.write_text("{}", encoding="ascii")
+    process = type("SyntheticProcess", (), {"poll": lambda self: 17})()
+    monkeypatch.setattr(time, "sleep", lambda _: pytest.fail("Exited process must fail immediately"))
+    with pytest.raises(AssertionError, match="exited.*17"):
+        _wait_for_ready_marker(process, marker, timeout=0.1)
+
+
+@pytest.mark.parametrize("boundary", ("completion", "readiness"))
+def test_timeout_reports_stages_and_output_after_owned_cleanup(tmp_path, monkeypatch, boundary):
+    fixture = object.__new__(BuildFixture)
+    fixture.root = tmp_path
+    fixture.shell = "synthetic-shell"
+    cleaned = []
+
+    class SyntheticProcess:
+        args = ["synthetic-build"]
+        returncode = None
+
+        def communicate(self, timeout):
+            raise subprocess.TimeoutExpired(self.args, timeout)
+
+    process = SyntheticProcess()
+
+    def stop(owned):
+        assert owned is process
+        cleaned.append(owned)
+        owned.returncode = -9
+        return b"captured standard output", b"captured standard error"
+
+    monkeypatch.setattr(fixture, "start", lambda *args: process)
+    monkeypatch.setattr(fixture, "stop", stop)
+    monkeypatch.setattr(fixture, "calls", lambda: [{"stage": "version"}, {"stage": "dependencies"}])
+    if boundary == "readiness":
+        def timeout(*args, **kwargs):
+            raise TimeoutError("Synthetic packager did not reach its wait point")
+        monkeypatch.setitem(globals(), "_wait_for_ready_marker", timeout)
+    with pytest.raises(AssertionError) as error:
+        fixture.invoke() if boundary == "completion" else fixture.wait_until_ready(process)
+    assert cleaned == [process]
+    for expected in ("version", "dependencies", "captured standard output", "captured standard error"):
+        assert expected in str(error.value)
