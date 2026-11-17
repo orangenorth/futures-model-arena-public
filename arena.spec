@@ -8,6 +8,9 @@ hiddenimports = (
     + collect_submodules("openai") + ["webview", "webview.platforms.edgechromium", "webview.platforms.winforms", "clr_loader", "pythonnet"]
 )
 datas = [("web", "web"), ("config/config.example.yaml", "config"), ("config/demo.yaml", "config"), ("config/contracts_cn.json", "config")]
+datas += [("config/" + name, "config") for name in (
+    "contracts_universe_cn.json", "contracts_admission_ledger_cn.json", "admission_source_policy_cn.json",
+)]
 try:
     datas += collect_data_files("webview")
 except Exception:

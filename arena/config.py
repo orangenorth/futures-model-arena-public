@@ -54,6 +54,13 @@ class ReplayCfg(BaseModel):
     # 没有历史就没有起点，每个 tick 都会失败、回放永远没有行情
     history: int = Field(300, ge=1)
 
+    @field_validator("bar_seconds")
+    @classmethod
+    def _compatible_bar_seconds(cls, value: int) -> int:
+        if 300 % value:
+            raise ValueError("replay.bar_seconds must divide 300 seconds to form 5m/15m/1h bars")
+        return value
+
     @field_validator("start_price")
     @classmethod
     def _finite_positive_prices(cls, v: Dict[str, float]) -> Dict[str, float]:
