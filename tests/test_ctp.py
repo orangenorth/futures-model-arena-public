@@ -1041,37 +1041,109 @@ def test_a_short_bar_length_raises_the_retention_to_what_1h_needs(tmp_path):
         src.close()
 
 
-def test_sub_minute_bars_still_reach_the_1h_indicators(tmp_path, monkeypatch):
-    """接受 30 秒的基础周期，就得保证 1h 的**全套**指标最终真的算得出来。
+@pytest.mark.parametrize("bar_seconds", [30, 60])
+@pytest.mark.parametrize("clock", ["13:59:05", "13:59:29", "13:59:30", "13:59:45", "13:59:59", "14:00:00"])
+def test_sub_minute_bars_still_reach_the_1h_indicators(tmp_path, monkeypatch, bar_seconds, clock):
+    """A full closed-bar budget plus the forming bar must survive stop/restart.
 
-    之前那条验收用例只断言"快照非空"，而 ema60 缺失恰恰不会让快照变空——1h 指标整块是
-    None、其余照常，快照、报价、决策全都正常。所以这里直接断 `ind_1h["ema60"]`，
-    并且一路断到落库：`save_md_bars` 的默认 keep=5000 同样会把 30 秒周期下该留的 7200 根裁掉，
-    于是重启后 1h 又从零开始攒。
+    Exercise both sides of the final base-bar and hourly boundaries. A closed
+    hourly bucket may contain partial observations, as with session breaks; this
+    does not claim sixty completely observed hours or admit a forming hour.
     """
-    need = retention_floor(30)
-    eng, db = build_engine(tmp_path, monkeypatch, bar_seconds=30)   # max_bars 用默认值
+    now = datetime.fromisoformat(f"2026-11-17T{clock}+00:00").timestamp()
+    monkeypatch.setattr(time, "time", lambda: now)
+    need = retention_floor(bar_seconds)
+    eng, db = build_engine(tmp_path, monkeypatch, bar_seconds=bar_seconds)
     try:
-        feed(eng, "RB0", [3400 + (i % 40) for i in range(need)])
-        assert len(eng.source.klines("RB0", "1h", 200)) >= INDICATOR_MIN_BARS, \
-            f"喂满 {need} 根 30 秒 bar（60 小时）之后，1h 序列仍然不足 {INDICATOR_MIN_BARS} 根"
-        snap = eng._build_snapshot(quotes=eng.source.latest(eng.symbols))
+        # max_bars counts CLOSED base bars; the current bar occupies a separate
+        # slot. N ticks would only provide N-1 closed bars, an unfilled budget.
+        feed(eng, "RB0", [3400 + (i % 40) for i in range(need + 1)])
+        agg = eng.source._agg["RB0"]
+        assert len(agg.bars) == need
+        assert agg._open_bar is not None
+        assert len(agg.snapshot()) == need + 1
+        assert eng.source.max_bars == need
+        quotes = eng.source.latest(eng.symbols)
+        snap = eng._build_snapshot(quotes=quotes)
         assert snap is not None and "RB0" in snap.symbols
-        assert snap.symbols["RB0"].ind_1h.get("ema60") is not None, "1h 的 ema60 永久缺失"
-        assert snap.symbols["RB0"].ind_1h.get("macd_dif") is not None
-        eng.stop()      # 落库发生在 stop() 里
-        rows = db.md_bars("RB0", limit=need * 2, bar_seconds=30)
-        assert len(rows) >= need, f"库里只留下 {len(rows)} 根，重启预热后照样凑不满 1h"
+        before = snap.symbols["RB0"].ind_1h
+        assert before.get("ema60") is not None, "1h 的 ema60 永久缺失"
+        assert before.get("macd_dif") is not None
+        comp_id, namespace = eng.comp_id, eng._md_feed("RB0")
+        history = eng.source.bars_1m("RB0")
+        eng.stop()
+        rows = db.md_bars("RB0", limit=need * 2, bar_seconds=bar_seconds, feed=namespace)
     finally:
         eng.stop()
         db.close()
 
-    # 重启后只预热、不喂任何新 tick：1h 指标就该是齐的——这正是把 bar 落库的理由
+    # No new tick: reopening must restore the exact history that worked before
+    # shutdown, including its extra current-bar slot and competition identity.
+    eng2, db2 = build_engine(tmp_path, monkeypatch, bar_seconds=bar_seconds)
+    try:
+        eng2._seed_md_bars()
+        assert eng2.comp_id == comp_id
+        assert eng2._md_feed("RB0") == namespace
+        restored = eng2._build_snapshot(quotes=quotes)
+        assert restored is not None and "RB0" in restored.symbols
+        after = restored.symbols["RB0"].ind_1h
+        assert after.get("ema60") is not None, "重启丢失了闭合小时线，ema60 又要重新积累"
+        assert after.get("macd_dif") is not None
+        assert after == before
+        assert len(rows) == need + 1, "持久化必须保留 N 根闭合基础 bar 和当前 bar"
+        assert eng2.source.bars_1m("RB0") == history
+        assert db2.md_bars("RB0", limit=need * 2, bar_seconds=bar_seconds, feed=namespace) == rows
+    finally:
+        eng2.stop()
+        db2.close()
+
+
+@pytest.mark.parametrize("bar_seconds", [10, 30, 60, 300])
+@pytest.mark.parametrize("live_first", [False, True])
+def test_seed_preserves_the_closed_budget_and_separate_forming_bar(bar_seconds, live_first):
+    history = [Bar(ts=i * bar_seconds, open=i + 1, high=i + 2, low=i + 0.5,
+                   close=i + 1.5, volume=i * 3, hold=i * 5) for i in range(5)]
+    agg = TickAggregator(bar_seconds=bar_seconds, max_bars=2)
+    if live_first:
+        agg.add(5 * bar_seconds, 9000, 10, 100, source="live")
+        expected = history[-2:] + agg.snapshot()
+    else:
+        expected = history[-3:]
+    agg.seed(history)
+    assert len(agg.bars) == 2
+    assert agg._open_bar is not None
+    assert agg.snapshot() == expected
+
+
+def test_old_retention_history_keeps_its_identity_and_rows(tmp_path, monkeypatch):
+    """An old writer's N-row history remains readable without a migration."""
+    now = datetime.fromisoformat("2026-11-17T13:59:45+00:00").timestamp()
+    monkeypatch.setattr(time, "time", lambda: now)
+    need = retention_floor(30)
+    assert need == 7200  # Existing effective max_bars/signature contract.
+    eng, db = build_engine(tmp_path, monkeypatch, bar_seconds=30)
+    try:
+        comp_id, namespace = eng.comp_id, eng._md_feed("RB0")
+        config_json = eng.comp["config_json"]
+        end = now - now % 30
+        old_history = [Bar(ts=end - (need - 1 - i) * 30, open=3400, high=3402,
+                           low=3399, close=3401, volume=i, hold=500_000) for i in range(need)]
+        # Emulate the previous writer rather than filling the new live buffer.
+        db.save_md_bars("RB0", old_history, keep=need, bar_seconds=30, feed=namespace)
+        old_rows = db.md_bars("RB0", need * 2, bar_seconds=30, feed=namespace)
+    finally:
+        eng.stop()
+        db.close()
     eng2, db2 = build_engine(tmp_path, monkeypatch, bar_seconds=30)
     try:
         eng2._seed_md_bars()
-        assert len(eng2.source.klines("RB0", "1h", 200)) >= INDICATOR_MIN_BARS, \
-            "预热只读回了配置里那个根数，1h 又要从零攒一遍"
+        assert eng2.comp_id == comp_id
+        assert eng2.comp["config_json"] == config_json
+        assert eng2._md_feed("RB0") == namespace
+        assert len(db2.list_competitions()) == 1
+        assert eng2.source.max_bars == need
+        assert eng2.source.bars_1m("RB0") == old_history
+        assert db2.md_bars("RB0", need * 2, bar_seconds=30, feed=namespace) == old_rows
     finally:
         eng2.stop()
         db2.close()

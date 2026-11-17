@@ -2971,7 +2971,9 @@ class Engine:
                 # 用源上**生效**的保留根数，不是配置里写的那个：源会按 bar_seconds 把它抬到
                 # 1h 指标够用为止（见 ctp.retention_floor）。`keep` 也要一起给——默认的
                 # 5000 会把 30s 周期下该留的 7200 根裁掉，重启后 1h 照样凑不齐。
-                keep = source.max_bars
+                # max_bars is the closed-base-bar budget. Persist the separate
+                # forming slot too, matching TickAggregator.snapshot/seed.
+                keep = source.max_bars + 1
                 since = self._md_persisted.get(symbol)
                 pending = bars[-keep:] if since is None else [b for b in bars if b.ts >= since]
                 if not pending:
@@ -3017,10 +3019,11 @@ class Engine:
             return
         seeded = 0
         bar_seconds = self.cfg.market_data.ctp.bar_seconds
+        keep = source.max_bars + 1  # Closed-bar budget plus the forming slot.
         for symbol in list(self.symbols):
             feed = self._md_feed(symbol)
             try:
-                rows = self.db.md_bars(symbol, source.max_bars, bar_seconds=bar_seconds, feed=feed)
+                rows = self.db.md_bars(symbol, keep, bar_seconds=bar_seconds, feed=feed)
                 if not rows:
                     # 旧写法的命名空间由新到旧依次并入：`INSERT OR IGNORE` 让先并入（较新）的那段
                     # 在重叠的时间戳上胜出，较旧的一段只补上更早的历史。不能并到第一个非空就停：
@@ -3031,7 +3034,7 @@ class Engine:
                         copied += self.db.copy_md_bars_feed(symbol, legacy, feed, bar_seconds)
                     if copied:
                         log.info("已把 %s 在旧签名写法下落库的 %d 根 bar 认领到当前命名空间", symbol, copied)
-                        rows = self.db.md_bars(symbol, source.max_bars, bar_seconds=bar_seconds, feed=feed)
+                        rows = self.db.md_bars(symbol, keep, bar_seconds=bar_seconds, feed=feed)
                 if not rows:
                     continue
                 source.seed_bars(symbol, [Bar(ts=r["ts"], open=r["open"], high=r["high"], low=r["low"],

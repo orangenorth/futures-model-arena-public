@@ -32,23 +32,43 @@ for this check. Native Windows UI acceptance still requires Windows. Making a
 check required for merging is a branch-protection decision; this change does not
 alter those settings.
 
+## CTP retention round trip
+
+The boundary regression found a mismatch between live and restored history.
+`TickAggregator` retains `max_bars` closed base bars and a separate forming bar,
+so its full snapshot contains `max_bars + 1` rows. Persistence and cold seeding
+previously trimmed that snapshot to `max_bars` rows. At `13:59:45 UTC`, the lost
+row can remove the oldest closed hourly bucket and leave only 59 after the
+engine correctly rejects the forming hour; EMA60 then disappears on restart.
+
+Persistence, both current/legacy namespace reads, and cold seeding now preserve
+the same closed-bar budget plus forming slot. `retention_floor`, effective
+`max_bars`, market-feed signatures and namespaces remain unchanged. There is no
+schema change or data migration. Old N-row histories remain readable with the
+same competition and row values; a bar already removed by an older writer cannot
+be recreated, and the history fills naturally as new ticks arrive.
+
+The guarantee follows the existing resampling semantics: 60 closed hourly
+buckets can include a partially observed oldest bucket or session gaps. It does
+not claim 60 completely observed hours or relax forming/future-bar admission.
+
 ## Verification on 2026-11-17
 
 - Ruff and actionlint 1.7.7 pass. An undefined-name probe exits 1 with `F821`.
-- The 12 selected canonical CTP helper cases and all four indicator/metric cases
-  pass. Before this change, the Linux/Python 3.12 suite passed 1497 tests. A later
-  full run passed 1496 and failed the existing
-  `test_sub_minute_bars_still_reach_the_1h_indicators` case.
-- A fixed clock reproduces the failure at `13:59:45 UTC` and passes at `13:59:05
-  UTC`. The same failure is reproduced in the private repository's untouched main
-  archive; both repositories share the relevant CTP code. The 7200 retained
-  30-second bars can contain only 59 completed hourly buckets once the forming
-  bucket is removed. The final full run allowed only loopback network access; the
-  failure is unrelated to external connectivity or the removed duplicate functions.
-- This is an unresolved existing regression, not a green-suite claim. Its fix
-  needs separate review: `retention_floor` also participates in the market-feed
-  signature and persisted history identity. The lint change does not alter that
-  contract, weaken the assertion, freeze this test at a passing time, or skip it.
-- Local Windows package/UI checks were not run on this Linux host. Hosted PR
-  results must be checked on the submitted commit; a passing run alone cannot
-  disprove the deterministic hourly-boundary failure above.
+- The strengthened regression feeds exactly N closed base bars plus one forming
+  bar and asserts that occupancy before taking the real engine snapshot. It
+  checks EMA60 and MACD before and after restart at `13:59:05`, `13:59:29`,
+  `13:59:30`, `13:59:45`, `13:59:59`, and `14:00:00 UTC`, for 30/60-second bars.
+  Saved/restored OHLCV and indicator values are compared exactly.
+- On the old implementation the `13:59:45` case passed before shutdown and failed
+  the real EMA60 assertion after restart. The expanded regression group produced
+  16 failures and 5 passes before the fix; all 21 pass after it. This includes
+  small-capacity cold/live seeding for 10/30/60/300-second bars and compatibility
+  with an older writer's N-row database, configuration and competition identity.
+- Full Linux/Python 3.12 offline suite: **1517 passed, 162 warnings**.
+- Each repository passes all 161 CTP and market-feed identity regression cases.
+  Local test commands allow only loopback network traffic; FakeSdk supplies CTP
+  ticks, with no provider credentials or external market connection.
+- Native Windows UI acceptance is not performed on this Linux host. Hosted
+  checks must be assessed on the final submitted commit. No existing test is
+  skipped or weakened to obtain these results.
