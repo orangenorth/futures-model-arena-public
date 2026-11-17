@@ -1,0 +1,25 @@
+name: Python correctness
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Python fatal errors
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install the pinned checker
+        run: python -m pip install ruff==0.14.5
+      - name: Check all Python files
+        run: python -m ruff check --output-format github .
