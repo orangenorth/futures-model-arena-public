@@ -294,7 +294,9 @@ class TickAggregator:
         当前报价还会退回库里那根陈旧的尾巴。所以只补实时序列**开始之前**的部分，
         同一根则两边合并；顺序谁先谁后都得到同一个结果。
         """
-        ordered = sorted(bars, key=lambda b: b.ts)[-self.max_bars:]
+        # _append retains max_bars CLOSED bars; snapshot adds the forming bar.
+        # Restore that same total capacity instead of losing one closed slot.
+        ordered = sorted(bars, key=lambda b: b.ts)[-(self.max_bars + 1):]
         if not ordered:
             return
         live = self.bars + ([self._open_bar] if self._open_bar is not None else [])
